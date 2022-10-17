@@ -3,14 +3,12 @@
 `include "minutes_seconds_counter.v"
 `include "segment7_decoder"
 
-
 module microwave(
     input wire startn, stopn, clearn, door_closed, clock,
     input wire[9:0] keypad,
     output wire mag_on,
     output wire[6:0] sec_ones_segs, sec_tens_segs, min_segs
 );
-
     // magnetron_control
     wire magnetron;
     magnetron_control control(

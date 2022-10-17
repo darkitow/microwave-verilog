@@ -7,11 +7,11 @@ module magnetron_control(
     assign Set = startn & door_closed;
     assign Reset = stopn | ~door_closed | timer_done;
 
-
     // SR latch
     wire Q, Qn;
     assign Q = Reset ~| Qn;
     assign Qn = Set ~| Q;
 
     assign magnetron = Q;
+
 endmodule
