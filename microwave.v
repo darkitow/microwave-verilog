@@ -23,7 +23,7 @@ module microwave(
     );
     assign mag_on = magnetron;
 
-    // encoder
+    // timer_input_and_control
     wire D, pgt_1Hz, loadn;
     timer_input_and_control encoder(
         .key(keypad),
@@ -34,7 +34,7 @@ module microwave(
         .loadn(loadn)
     );
 
-    // timer
+    // minutes_seconds_counter
     wire sec_ones, sec_tens, mins, zero;
     minutes_seconds_counter timer(
         .data(D),
@@ -48,7 +48,7 @@ module microwave(
         .zero(zero)
     );
 
-    // decode
+    // segment7_decoder
     segment7_decoder decoder(
         .sec_ones(sec_ones),
         .sec_tens(sec_tens),
