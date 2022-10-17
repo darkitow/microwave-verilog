@@ -5,7 +5,7 @@ module magnetron_control(
     // On/Off Logic
     wire Set, Reset;
     assign Set = startn & door_closed;
-    assign Reset = stopn | ~door_closed | timer_done;
+    assign Reset = stopn | ~door_closed | timer_done | clearn;
 
     // SR latch
     wire Q, Qn;
