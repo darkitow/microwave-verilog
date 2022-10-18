@@ -38,7 +38,7 @@ module timer_input_and_control(
         key[1] ? 4'b0001 :
         key[0] ? 4'b0000 :
         4'bx) : D;
-    assign valid = enablen ? ((key == 10'b0000000000) ? 1'b0 : 1'b1) : valid;
+    assign valid = enablen ? ((key == 10'b0) ? 1'b0 : 1'b1) : valid;
     assign loadn = valid;
 
     // 100Hz to 1Hz

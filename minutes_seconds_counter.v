@@ -1,34 +1,40 @@
-module BCD_counter #(parameter MOD)(
+module BCD_counter #(parameter MOD = 10)(
     input wire[3:0] data,
-    input wire loadn, clrn, clk, en
+    input wire loadn, clrn, clk, en,
     output wire[3:0] out,
     output wire tc, zero
 );
     integer count;
-    always @(posedge clrn) begin
+    initial begin
         count <= 0;
     end
 
     always @(posedge clk) begin
-        if (loadn) begin
-            count <= data; 
+        // update count
         if (en) begin
-            out <= 'b0
-        else begin
             if (count == 0) begin
-                count <= MOD;
+                count <= MOD-1;
+                tc = 1'b1;
             end else begin
-                count <= count - 1;
+                tc = 1'b0;
+                count = count - 1;
             end
-            
-            out <= count;
-
-            if (out == 0) begin
-                zero = 1'b1;
-            end else begin
-                zero = 1'b0;
+        end else begin
+            if (loadn) begin
+                count <= data;
             end
+            tc <= 1'b0;
         end
+
+        //update zero
+        if (count == 0) begin
+            zero <= 1'b1;
+        end else begin
+            zero <= 1'b0;
+        end
+
+        // update out
+        out = count;
     end
 
 endmodule
@@ -40,8 +46,9 @@ module minutes_seconds_counter(
     output wire zero
 );
     // sec_ones
-    wire ones_wire, tc1, zero1;
-    BCD_counter #(MOD = 10) sec_ones_counter(
+    wire[3:0] ones_wire;
+    wire tc1, zero1;
+    BCD_counter #(10) sec_ones_counter(
         .data(data),
         .loadn(loadn),
         .clrn(clrn),
@@ -54,22 +61,24 @@ module minutes_seconds_counter(
     assign sec_ones = ones_wire;
 
     // sec_tens
-    wire tens_wire, tc2, zero2;
-    BCD_counter #(MOD = 6) sec_tens_counter(
+    wire[3:0] tens_wire;
+    wire tc2, zero2;
+    BCD_counter #(6) sec_tens_counter(
         .data(ones_wire),
         .loadn(loadn),
         .clrn(clrn),
         .clk(clock),
         .en(tc1),
-        .out(),
+        .out(tens_wire),
         .tc(tc2),
-        .zero(zero3)
+        .zero(zero2)
     );
     assign sec_tens = tens_wire;
 
     // mins
-    wire mins_wire, zero3;
-    BCD_counter #(MOD = 10) mins_counter(
+    wire[3:0] mins_wire;
+    wire zero3;
+    BCD_counter #(10) mins_counter(
         .data(tens_wire),
         .loadn(loadn),
         .clrn(clrn),
@@ -79,7 +88,7 @@ module minutes_seconds_counter(
         .tc(tc3),
         .zero(zero3)
     );
-    assign mins = mins_wire
+    assign mins = mins_wire;
 
     assign zero = zero1 & zero2 & zero3;
 
