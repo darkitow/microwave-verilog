@@ -1,8 +1,8 @@
 module BCD_counter #(parameter MOD = 10)(
-    input wire[3:0] data,
-    input wire loadn, clrn, clk, en,
-    output wire[3:0] out,
-    output wire tc, zero
+    input [3:0] data,
+    input loadn, clrn, clk, en,
+    output reg [3:0] out,
+    output reg zero, tc
 );
     integer count;
     initial begin

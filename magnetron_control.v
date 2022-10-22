@@ -1,6 +1,6 @@
 module magnetron_control(
-    input wire startn, stopn, clearn, door_closed, timer_done,
-    output wire magnetron
+    input startn, stopn, clearn, door_closed, timer_done,
+    output magnetron
 );
     // On/Off Logic
     wire Set, Reset;
